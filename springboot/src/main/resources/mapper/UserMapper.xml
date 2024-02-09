@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springboot.mapper.UserMapper">
+
+    <insert id="insert">
+        insert into `user` (username, password, name, phone, email, address, avatar, introduce, typeId)
+        values (#{username}, #{password}, #{name}, #{phone}, #{email}, #{address}, #{avatar}, #{introduce}, #{typeId})
+    </insert>
+
+    <update id="update">
+        update `user`
+        set username  = #{username},
+            password  = #{password},
+            name      = #{name},
+            phone     = #{phone},
+            email     = #{email},
+            address   = #{address},
+            avatar    = #{avatar},
+            introduce = #{introduce},
+            typeId    = #{typeId}
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete
+        from `user`
+        where id = #{id}
+    </delete>
+
+
+    <select id="findBySearch" resultType="User">
+        select user.*, type.name AS typeName from user left join type on user.typeId = type.id
+        <where>
+            <if test="params != null and params.username != null and params.username != ''">
+                and username like concat ('%',#{params.username},'%')
+            </if>
+            <if test="params != null and params.address != null and params.address != ''">
+                and address like concat ('%',#{params.address},'%')
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+</mapper>
